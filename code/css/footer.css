@@ -1,0 +1,44 @@
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+}
+
+.footer {
+  position: relative;
+  width: 100%;
+  height: 55px;
+  background-color: #f55551;
+  text-align: center;
+  padding: 15px;
+  color: white;
+  margin-top: auto;
+}
+
+.text-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+#association-footer {
+  text-transform: uppercase;
+  order: 1;
+}
+
+#copyright {
+  order: 2;
+}
+
+/* When the screen < 438px */
+@media screen and (max-width: 438px){
+    .footer {
+        height: 95px;
+    }
+}
