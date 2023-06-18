@@ -13,13 +13,54 @@
     <!-- ************************************ -->
 
     <title>Association</title>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        .jumbotron {
+            background-color: #F55551;
+            color: white;
+            padding: 3rem;
+            flex: 1;
+        }
+
+        .book-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .book-description {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            font-size: 1.25rem;
+            padding: 0.75rem 2rem;
+        }
+    </style>
 </head>
 
-<body>
-    <h1>Accueil</h1>
-    <a href="ouvrages.php" class="btn btn-primary">Ouvrages</a>
 
-    <script src="script/script.js?<?= time() ?>"></script>
+<body>
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-2">L'Association Librairie Social Club Nouméa</h1>
+            <h2 class="display-6 ">Vous vous situez actuellement sur la page d'Accueil</h2>
+            <hr class="my-4">
+            <p class="lead">Découvrez une association passionée par les connaissances et les aventures que réserve la littérature.</p>
+            <a href="ouvrages.php" class="btn btn-light cta-button">Voir les Ouvrages</a>
+        </div>
+    </div>
 </body>
 
 </html>

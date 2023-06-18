@@ -1,3 +1,37 @@
+<?php session_start();
+
+if (isset($_COOKIE['rememberMe']) && !isset($_SESSION['loggedin'])) {
+    require_once('identifiants_bdd.php');
+    $sessionId = $_COOKIE['rememberMe'];
+
+    try {
+        $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Requête SQL pour récupérer les informations de l'utilisateur basées sur l'identifiant de session
+        $query = "SELECT * FROM membre WHERE membre_session_id = :sessionId";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':sessionId', $sessionId, PDO::PARAM_STR);
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($results) {
+            $_SESSION['loggedin'] = true;
+            $_SESSION['userMail'] = $results[0]['membre_mail'];
+            $_SESSION['userId'] = $results[0]['membre_id'];
+            $_SESSION['userFirstName'] = $results[0]['membre_nom'];
+            $_SESSION['userLastName'] = $results[0]['membre_prenom'];
+            $_SESSION['userRole'] = $results[0]['membre_administrateur'];
+        }
+
+        $conn = null; // Déconnexion SQL
+    } catch (PDOException $e) {
+        echo "Erreur : " . $e->getMessage();
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -24,7 +58,17 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('#example').DataTable();
+            $('#example').DataTable({
+                "language": {
+                    "lengthMenu": "Affiche _MENU_ enregistrements",
+                    "info": "Affichage de _START_ à _END_ sur _TOTAL_ enregistrements",
+                    "search": "Rechercher :",
+                    "paginate": {
+                        "next": "Suivant",
+                        "previous": "Précédent"
+                    }
+                }
+            });
         });
     </script>
     <!-- ************************************ -->
@@ -45,7 +89,7 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse me-2" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link" href="index.php">Accueil</a>
@@ -53,20 +97,30 @@
                         <li class="nav-item">
                             <a class="nav-link" href="ouvrages.php">Les ouvrages</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="administration.php">Administration</a>
-                            <!-- <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
+                        <?php if (($_SESSION != null || '') && ($_SESSION['userRole'] == 1)) : ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="administration.php">Administration</a>
                             </li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul> -->
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="connexion.php">Se connecter</a>
-                        </li>
+                        <?php endif ?>
+
+                        <?php if ($_SESSION != null || '') : ?>
+                            <?php $user = $_SESSION['userLastName']; ?>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" href="sign_in.php"><?php echo $user; ?></a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="my-account.php">Mon compte</a></li>
+                                    <li><a class="dropdown-item" href="my-loans.php">Mes emprunts</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="connectionLogic/disconnect_logic.php">Se déconnecter</a></li>
+                                </ul>
+                            </li>
+                        <?php else : ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="sign_in.php">Se connecter</a>
+                            </li>
+                        <?php endif ?>
                     </ul>
                 </div>
             </div>

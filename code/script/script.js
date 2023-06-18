@@ -1,1 +1,0 @@
-/* Page JavaScript reliant la page index.phtml */
