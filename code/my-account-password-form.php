@@ -1,6 +1,7 @@
 <?php require_once('header.php');
-require_once('identifiants_bdd.php');
-$id = (isset($_SESSION['userId'])) ? $_SESSION['userId'] : null;
+if ($_SESSION != null || '') {
+    require_once('identifiants_bdd.php');
+    $id = (isset($_SESSION['userId'])) ? $_SESSION['userId'] : null;
 
 ?>
 <section class="content">
@@ -10,15 +11,18 @@ $id = (isset($_SESSION['userId'])) ? $_SESSION['userId'] : null;
         <form action="accountLogic/editPasswordLogic.php?<?= $id ?>" method="POST">
             <div class="mb-3">
                 <label for="user_password" class="form-label">Mot de passe actuel</label>
-                <input type="password" class="form-control" id="user_password" name="user_password" placeholder="Mot de passe actuel">
+                <input type="password" class="form-control" id="user_password" name="user_password"
+                    placeholder="Mot de passe actuel" required>
             </div>
             <div class="mb-3">
                 <label for="user_new_password" class="form-label">Nouveau mot de passe</label>
-                <input type="password" class="form-control" id="user_new_password" name="user_new_password" placeholder="Nouveau mot de passe">
+                <input type="password" class="form-control" id="user_new_password" name="user_new_password"
+                    placeholder="Nouveau mot de passe" required>
             </div>
             <div class="mb-3">
                 <label for="confirm_user_new_password" class="form-label">Confirmez votre nouveau mot de passe</label>
-                <input type="password" class="form-control" id="confirm_user_new_password" name="confirm_user_new_password" placeholder="Confirmer le nouveau mot de passe">
+                <input type="password" class="form-control" id="confirm_user_new_password"
+                    name="confirm_user_new_password" placeholder="Confirmer le nouveau mot de passe" required>
             </div>
             <div class="d-flex justify-content-center">
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
@@ -27,4 +31,8 @@ $id = (isset($_SESSION['userId'])) ? $_SESSION['userId'] : null;
     </div>
 </section>
 
-<?php require_once('footer.php') ?>
+<?php require_once('footer.php');
+} else {
+    // Redirection vers la page des ouvrages pour les utilisateurs non admins ou non connectés
+    echo '<script>window.location.href = "ouvrages.php";</script>';
+} ?>

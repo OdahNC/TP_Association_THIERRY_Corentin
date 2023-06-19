@@ -41,11 +41,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     setcookie('rememberMe', $sessionId, time() + 86400 * 30, '/');
                 }
             }
+        } else {
+            // On prévient qu'une erreur est survenue
+            echo '<script>alert("L\'identifiant et le mot de passe ne correspondent pas ou n\'existent pas");</script>';
+            $conn = null; // On déconnecte SQL
+            echo '<script>window.location.href = "../sign_in.php";</script>';
         }
         $conn = null; // Déconnexion SQL
 
-        // On prévient que l'utillisateur est deconnecté
-        echo '<script>alert("Bonjour ' . $_SESSION['userFirstName'] . ' ' . $_SESSION['userLastName']. '");</script>';
+        // On salue l'uilisateur
+        echo '<script>alert("Bonjour ' . $_SESSION['userFirstName'] . ' ' . $_SESSION['userLastName'] . '");</script>';
 
         // Redirection vers la page des ouvrages
         echo '<script>window.location.href = "../ouvrages.php";</script>';

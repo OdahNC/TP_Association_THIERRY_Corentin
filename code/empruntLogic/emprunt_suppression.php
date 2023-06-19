@@ -1,9 +1,9 @@
 <?php
 
 require_once('../identifiants_bdd.php');
-
-$id = $_GET['emprunt_id'];
-
+if (isset($_GET['emprunt_id'])) {
+    $id = $_GET['emprunt_id'];
+}
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -19,7 +19,6 @@ try {
     $stmt->execute();
     // On prévient que l'opération a été effectuée
     echo '<script>alert("La suppression de l\'emprunt a été effectuée avec succès !");</script>';
-
     $conn = null; // Déconnexion SQL
 
     // Redirection vers la page des ouvrages

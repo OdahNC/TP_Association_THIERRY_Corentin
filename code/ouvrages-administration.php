@@ -3,22 +3,22 @@ require_once('header.php');
 if ((($_SESSION != null || '') && ($_SESSION['userRole'] == 1))) {
     require_once('CRUDLogic/selectAllOuvrages.php') ?>
 
-    <section class="content">
+<section class="content">
     <div class="d-flex justify-content-center">
         <a href="administration.php" class="btn btn-light mb-3 mx-3 w-75">Retour</a>
         <a href="ouvrage-form.php" class="btn btn-primary mb-3 mx-3 w-75">Créer</a>
     </div>
-        <table id="example" class="display" style="width:100%;">
-            <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Auteur</th>
-                    <th>Type</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
+    <table id="example" class="display" style="width:100%;">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Auteur</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
                 foreach ($results as $row) {
                     echo "<tr>";
                     echo "<td>" . $row['ouvrage_nom'] . "</td>";
@@ -28,21 +28,18 @@ if ((($_SESSION != null || '') && ($_SESSION['userRole'] == 1))) {
                     echo "</tr>";
                 }
                 ?>
-            </tbody>
-        </table>
-    </section>
+        </tbody>
+    </table>
+</section>
 
-    <script>
-        function deleteConfirm() {
-            return window.confirm('Souhaitez-vous vraiment confirmer la suppression ?')
-        }
-    </script>
+<script>
+function deleteConfirm() {
+    return window.confirm('Souhaitez-vous vraiment confirmer la suppression ?')
+}
+</script>
 
 <?php require_once('footer.php');
 } else {
-    // On prévient que l'utilisateur n'a pas accès a la ressource
-    echo '<script>alert("Vous n\'avez pas accès a cette ressource. Retour aux ouvrages...");</script>';
-
-    // Redirection vers la page des ouvrages
+    // Redirection vers la page des ouvrages pour les utilisateurs non admins ou non connectés
     echo '<script>window.location.href = "ouvrages.php";</script>';
 } ?>
